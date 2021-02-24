@@ -1,6 +1,7 @@
 package com.capgemini.model.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,18 @@ public class PagamentoService {
 	}
 
 	private BigDecimal getPorcentagemPagamento(PagamentoEntity pagamento) {
-		return new BigDecimal(0.0D);
+
+		LocalDateTime start = pagamento.getDataPagamento().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0)
+				.withNano(0);
+		;
+		LocalDateTime end = pagamento.getDataPagamento()
+				.withDayOfMonth(pagamento.getDataPagamento().toLocalDate().lengthOfMonth()).withHour(23).withMinute(59)
+				.withSecond(59).withNano(0);
+
+		BigDecimal sumValor = this.repository.sumByDataPagamentoBetween(start, end);
+		BigDecimal porcentagem = pagamento.getValor().divide(sumValor, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100.0D));
+
+		return porcentagem;
 	}
 
 }
