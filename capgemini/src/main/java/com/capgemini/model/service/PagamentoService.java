@@ -48,7 +48,7 @@ public class PagamentoService {
 				.withSecond(59).withNano(0);
 
 		BigDecimal sumValor = this.repository.sumByDataPagamentoBetween(start, end);
-		BigDecimal porcentagem = pagamento.getValor().divide(sumValor, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100.0D));
+		BigDecimal porcentagem = (sumValor.doubleValue() > 0) ? pagamento.getValor().divide(sumValor, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100.0D)) : new BigDecimal(0D);
 
 		return porcentagem;
 	}
