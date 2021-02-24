@@ -1,12 +1,15 @@
 package com.capgemini.model.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.capgemini.model.entity.PagamentoEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PagamentoDTO {
+public class PagamentoDTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	public PagamentoDTO(PagamentoEntity pagamento, BigDecimal porcentagem) {
 		this.id = pagamento.getId();

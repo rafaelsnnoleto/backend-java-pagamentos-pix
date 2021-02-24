@@ -1,27 +1,28 @@
 package com.capgemini.utils;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.http.HttpStatus;
 
-public class ResponseService {
+public class ResponseService<T> {
 
-	private Object data;
-	private HttpStatus status = HttpStatus.OK;
+	private T data;
 	private ArrayList<ResponseServiceField> alerts = new ArrayList<ResponseServiceField>();
+	@JsonIgnore
+	private HttpStatus status = HttpStatus.OK;
 
 	public ResponseService() {
 	}
 
-	public ResponseService(Object data) {
+	public ResponseService(T data) {
 		if (data != null) {
 			this.data = data;
 		}
 	}
 
-	public ResponseService(Object data, HttpStatus status) {
+	public ResponseService(T data, HttpStatus status) {
 		if (data != null) {
 			this.data = data;
 		}
@@ -31,7 +32,7 @@ public class ResponseService {
 		}
 	}
 
-	public ResponseService(Object data, HttpStatus status, ArrayList<ResponseServiceField> alerts) {
+	public ResponseService(T data, HttpStatus status, ArrayList<ResponseServiceField> alerts) {
 		if (data != null) {
 			this.data = data;
 		}
@@ -47,7 +48,7 @@ public class ResponseService {
 
 	public static class ResponseServiceField {
 		private String field;
-		private ArrayList<Object> messages = new ArrayList<>();
+		private ArrayList<String> messages = new ArrayList<>();
 
 		public ResponseServiceField() {
 			super();
@@ -58,7 +59,7 @@ public class ResponseService {
 			this.field = field;
 		}
 
-		public ResponseServiceField(String field, Object message) {
+		public ResponseServiceField(String field, String message) {
 			super();
 			this.field = field;
 
@@ -75,11 +76,11 @@ public class ResponseService {
 			this.field = field;
 		}
 
-		public ArrayList<Object> getMessages() {
+		public ArrayList<String> getMessages() {
 			return messages;
 		}
 
-		public void addMensagem(Object message) {
+		public void addMensagem(String message) {
 			if (message != null) {
 				this.messages.add(message);
 			}
@@ -103,22 +104,11 @@ public class ResponseService {
 		}
 	}
 
-	public Map<String, Object> getResponse() {
-		LinkedHashMap<String, Object> responseDados = new LinkedHashMap<>();
-		responseDados.put("data", (this.data != null) ? this.data : new ArrayList<>());
-
-		if (this.alerts != null && !this.alerts.isEmpty()) {
-			responseDados.put("alerts", this.alerts);
-		}
-
-		return responseDados;
-	}
-
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(T data) {
 		if (data != null) {
 			this.data = data;
 		}

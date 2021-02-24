@@ -2,6 +2,7 @@ package com.capgemini.model.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,15 @@ public class PagamentoService {
 	@Autowired
 	private PagamentoRepository repository;
 
-	public ResponseService post(PagamentoEntity entity) {
+	public ResponseService<PagamentoDTO> post(PagamentoEntity entity) {
 		entity.setDataPagamento(LocalDateTime.now());
 		PagamentoEntity pagamento = this.repository.save(entity);
-		return new ResponseService(new PagamentoDTO(pagamento, this.getPorcentagemPagamento(pagamento)),
+		return new ResponseService<PagamentoDTO>(new PagamentoDTO(pagamento, this.getPorcentagemPagamento(pagamento)),
 				HttpStatus.CREATED);
 	}
 
-	public ResponseService getAll() {
-		ResponseService responseService = new ResponseService();
+	public ResponseService<List<PagamentoDTO>> getAll() {
+		ResponseService<List<PagamentoDTO>> responseService = new ResponseService<List<PagamentoDTO>>();
 
 		responseService.setData(this.repository.findAll().stream().map(pagamento -> {
 			return new PagamentoDTO(pagamento, this.getPorcentagemPagamento(pagamento));

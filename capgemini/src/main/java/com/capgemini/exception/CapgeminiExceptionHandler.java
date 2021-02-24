@@ -36,19 +36,20 @@ public class CapgeminiExceptionHandler extends ResponseEntityExceptionHandler {
 		// Depois criar estratégia de log de erros.
 		System.out.println(ex.getMessage());
 		String message = this.messageSource.getMessage("error.request", null, Locale.getDefault());
-		ResponseService responseService = new ResponseService(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		ResponseService<String> responseService = new ResponseService<String>(message,
+				HttpStatus.INTERNAL_SERVER_ERROR);
 
-		return super.handleExceptionInternal(ex, responseService.getResponse(), new HttpHeaders(),
-				responseService.getStatus(), request);
+		return super.handleExceptionInternal(ex, responseService, new HttpHeaders(), responseService.getStatus(),
+				request);
 	}
 
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<Object> handleNotFoundException(Exception ex, WebRequest request) {
 		String message = this.messageSource.getMessage("notfound.request", null, Locale.getDefault());
-		ResponseService responseService = new ResponseService(message, HttpStatus.NOT_FOUND);
+		ResponseService<String> responseService = new ResponseService<String>(message, HttpStatus.NOT_FOUND);
 
-		return super.handleExceptionInternal(ex, responseService.getResponse(), new HttpHeaders(),
-				responseService.getStatus(), request);
+		return super.handleExceptionInternal(ex, responseService, new HttpHeaders(), responseService.getStatus(),
+				request);
 	}
 
 	@ExceptionHandler(BusinessException.class)
@@ -57,7 +58,7 @@ public class CapgeminiExceptionHandler extends ResponseEntityExceptionHandler {
 		TypeReference<ResponseServiceField> typeRef = new TypeReference<ResponseServiceField>() {
 		};
 		String message = this.messageSource.getMessage("bad.request", null, Locale.ENGLISH);
-		ResponseService responseService = new ResponseService(message, HttpStatus.BAD_REQUEST);
+		ResponseService<String> responseService = new ResponseService<String>(message, HttpStatus.BAD_REQUEST);
 
 		try {
 			ResponseServiceField alert = mapper.readValue(ex.getMessage(), typeRef);
@@ -68,24 +69,23 @@ public class CapgeminiExceptionHandler extends ResponseEntityExceptionHandler {
 		} catch (JsonProcessingException e) {
 		}
 
-		return super.handleExceptionInternal(ex, responseService.getResponse(), new HttpHeaders(),
-				responseService.getStatus(), request);
+		return super.handleExceptionInternal(ex, responseService, new HttpHeaders(), responseService.getStatus(),
+				request);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String message = this.messageSource.getMessage("bad.request", null, Locale.getDefault());
-		ResponseService responseService = new ResponseService(message, status); // HttpStatus.BAD_REQUEST
-		return super.handleExceptionInternal(ex, responseService.getResponse(), headers, responseService.getStatus(),
-				request);
+		ResponseService<String> responseService = new ResponseService<String>(message, status); // HttpStatus.BAD_REQUEST
+		return super.handleExceptionInternal(ex, responseService, headers, responseService.getStatus(), request);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String message = this.messageSource.getMessage("bad.request", null, Locale.getDefault());
-		ResponseService responseService = new ResponseService(message, status);
+		ResponseService<String> responseService = new ResponseService<String>(message, status);
 
 		for (ObjectError objectError : ex.getBindingResult().getAllErrors()) {
 			var objectField = ((FieldError) objectError);
@@ -103,8 +103,7 @@ public class CapgeminiExceptionHandler extends ResponseEntityExceptionHandler {
 			}
 		});
 
-		return super.handleExceptionInternal(ex, responseService.getResponse(), headers, responseService.getStatus(),
-				request);
+		return super.handleExceptionInternal(ex, responseService, headers, responseService.getStatus(), request);
 	}
 
 }

@@ -19,11 +19,11 @@ public class IndexController {
 	private MessageSource messageSource;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> welcomeDentesys() {
-		ResponseService responseService = new ResponseService(
+	public ResponseEntity<ResponseService<String>> welcomeDentesys() {
+		ResponseService<String> responseService = new ResponseService<String>(
 				this.messageSource.getMessage("welcome", null, Locale.getDefault()));
 
-		return ResponseEntity.status(responseService.getStatus()).body(responseService.getResponse());
+		return ResponseEntity.status(responseService.getStatus()).body(responseService);
 	}
 
 }

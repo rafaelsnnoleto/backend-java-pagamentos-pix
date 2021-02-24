@@ -22,6 +22,20 @@ public class PagamentoEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public PagamentoEntity() {
+	}
+
+	public PagamentoEntity(Long id, String nomeDestinatario, String cpf, String chavePix, BigDecimal valor,
+			LocalDateTime dataPagamento, String descricao) {
+		this.id = id;
+		this.nomeDestinatario = nomeDestinatario;
+		this.cpf = cpf;
+		this.chavePix = chavePix;
+		this.valor = valor;
+		this.dataPagamento = dataPagamento;
+		this.descricao = descricao;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
