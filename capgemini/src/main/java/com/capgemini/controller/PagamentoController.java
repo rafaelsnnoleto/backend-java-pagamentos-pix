@@ -36,7 +36,7 @@ public class PagamentoController {
 		return ResponseEntity.status(responseService.getStatus()).body(responseService);
 	}
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.OK)
 	@Transactional
 	public ResponseEntity<ResponseService<List<PagamentoDTO>>> getAll() {
